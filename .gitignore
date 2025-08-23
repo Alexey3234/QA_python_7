@@ -1,0 +1,24 @@
+# Игнорировать кэш Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Игнорировать кэш pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Игнорировать временные файлы тестов
+*.tmp
+*.testdb
+*.log
+
+# Игнорировать локальные настройки
+local_*.py
+.env.test
+
+# Игнорировать файлы IDE
+.idea/
+.vscode/
+*.swp
