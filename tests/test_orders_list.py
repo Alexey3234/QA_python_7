@@ -23,23 +23,21 @@ class TestOrdersList:
         assert "orders" in response_json, "В ответе должно быть поле 'orders'"
         assert isinstance(response_json["orders"], list), "Поле 'orders' должно быть списком"
         
-        if response_json["orders"]:
-            first_order = response_json["orders"][0]
-            assert "id" in first_order, "Заказ должен содержать поле 'id'"
-            assert "track" in first_order, "Заказ должен содержать поле 'track'"
-            assert "firstName" in first_order, "Заказ должен содержать поле 'firstName'"
-            assert "lastName" in first_order, "Заказ должен содержать поле 'lastName'"
-            assert "address" in first_order, "Заказ должен содержать поле 'address'"
-            assert "metroStation" in first_order, "Заказ должен содержать поле 'metroStation'"
-            assert "phone" in first_order, "Заказ должен содержать поле 'phone'"
-            assert "rentTime" in first_order, "Заказ должен содержать поле 'rentTime'"
-            assert "deliveryDate" in first_order, "Заказ должен содержать поле 'deliveryDate'"
-            assert "status" in first_order, "Заказ должен содержать поле 'status'"
-            
-            assert isinstance(first_order["id"], int), "ID заказа должен быть числом"
-            assert isinstance(first_order["track"], int), "Track номер должен быть числом"
-            assert isinstance(first_order["firstName"], str), "Имя должно быть строкой"
-            assert isinstance(first_order["lastName"], str), "Фамилия должна быть строкой"
+        assert len(response_json["orders"]) > 0, "Список заказов не должен быть пустым для проверки структуры"
+        
+        first_order = response_json["orders"][0]
+        required_fields = [
+            "id", "track", "firstName", "lastName", "address", 
+            "metroStation", "phone", "rentTime", "deliveryDate", "status"
+        ]
+        
+        for field in required_fields:
+            assert field in first_order, f"Заказ должен содержать поле '{field}'"
+        
+        assert isinstance(first_order["id"], int), "ID заказа должен быть числом"
+        assert isinstance(first_order["track"], int), "Track номер должен быть числом"
+        assert isinstance(first_order["firstName"], str), "Имя должно быть строкой"
+        assert isinstance(first_order["lastName"], str), "Фамилия должна быть строкой"
         
         allure.dynamic.description(f"Получено заказов: {len(response_json['orders'])}")
     
