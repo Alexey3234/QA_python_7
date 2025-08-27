@@ -61,31 +61,38 @@ class TestCourierCreation:
         assert response.status_code == 400
         assert response.json() == {"code": 400, "message": "Недостаточно данных для создания учетной записи"}
 
-    @allure.title("Создание курьера без имени")
-    @allure.step("Создание курьера без указания имени (firstName)")
-    def test_create_courier_without_first_name(self):
+    @allure.title("Успешное создание курьера без указания имени")
+    @allure.step("Создание курьера без firstName и проверка успешного ответа")
+    def test_create_courier_without_first_name_success(self):
         payload = {
             "login": generate_random_string(10),
             "password": generate_random_string(10)
         }
-
+    
         response = requests.post(Urls.CREATE_COURIER, data=payload)
-        
         assert response.status_code == 201
         assert response.json() == {"ok": True}
-        
-        login_response = login_courier(payload["login"], payload["password"])
+
+
+    @allure.title("Успешная авторизация курьера без имени")
+    @allure.step("Авторизация курьера созданного без firstName")
+    def test_login_courier_without_first_name(self, courier):
+        login_response = login_courier(courier["login"], courier["password"])
         assert login_response.status_code == 200
         assert "id" in login_response.json()
 
-    @allure.title("Создание курьера со всеми полями")
-    @allure.step("Создание курьера с указанием всех обязательных полей")
-    def test_create_courier_with_all_fields(self, random_courier_data):
+    @allure.title("Успешное создание курьера со всеми полями")
+    @allure.step("Создание курьера с указанием всех обязательных полей и проверка ответа")
+    def test_create_courier_with_all_fields_success(self, random_courier_data):
         response = requests.post(Urls.CREATE_COURIER, data=random_courier_data)
-        
+    
         assert response.status_code == 201
         assert response.json() == {"ok": True}
-        
-        login_response = login_courier(random_courier_data["login"], random_courier_data["password"])
+
+
+    @allure.title("Успешная авторизация курьера со всеми полями")
+    @allure.step("Авторизация курьера созданного со всеми полями")
+    def test_login_courier_with_all_fields(self, courier):
+        login_response = login_courier(courier["login"], courier["password"])
         assert login_response.status_code == 200
         assert "id" in login_response.json()
